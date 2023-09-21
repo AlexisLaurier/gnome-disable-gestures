@@ -11,11 +11,12 @@ export default class Extension {
   enable () {
     global.stage.get_actions().forEach(a => { a.enabled = false })
     const disableUnmaximizeGesture = () => {
-      global.stage.get_actions().forEach(a => { if (a !== this) { a.enabled = false } })
+      global.stage.get_actions().forEach(a => { if (a !== this) { a.enabled = false } });
+      global.stage.remove_action_by_name('osk');
     }
     global.display.connect('notify::focus-window', disableUnmaximizeGesture)
     global.display.connect('in-fullscreen-changed', disableUnmaximizeGesture)
-    global.stage.remove_action_by_name('osk');
+
   }
 
   disable () {
