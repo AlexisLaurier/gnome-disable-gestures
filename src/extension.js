@@ -15,6 +15,7 @@ export default class Extension {
     }
     global.display.connect('notify::focus-window', disableUnmaximizeGesture)
     global.display.connect('in-fullscreen-changed', disableUnmaximizeGesture)
+    global.stage.remove_action_by_name('osk');
   }
 
   disable () {
