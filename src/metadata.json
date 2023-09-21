@@ -1,9 +1,9 @@
 {
-  "name": "Disable Gestures 2021",
+  "name": "Disable Gestures 2023",
   "description": "Disable all GNOME built-in gestures. Useful for kiosks and touch screen apps.",
-  "uuid": "disable-gestures-2021@verycrazydog.gmail.com",
+  "uuid": "disable-gestures-2023@AlexisLaurier",
   "shell-version": [
     "45"
   ],
-  "url": "https://github.com/VeryCrazyDog/gnome-disable-gestures"
+  "url": "https://github.com/AlexisLaurier/gnome-disable-gestures"
 }
