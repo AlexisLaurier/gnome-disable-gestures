@@ -1,7 +1,7 @@
 {
   "name": "Disable Gestures 2023",
   "description": "Disable all GNOME built-in gestures. Useful for kiosks and touch screen apps.",
-  "uuid": "disable-gestures-2023@AlexisLaurier",
+  "uuid": "disable-gestures-2023@alexislaurier.fr",
   "shell-version": [
     "3.36",
     "3.38",
