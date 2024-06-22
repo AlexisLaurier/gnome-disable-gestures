@@ -1,47 +1,38 @@
-/* extension.js
+/**
+ * Disable Gestures 2021
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * A GNOME extension that disables built-in gestures. Useful for kiosks and touchscreen apps.
  */
+export default class Extension {
+  focusWindowId = null
+  inFullscreenChangedId = null
 
-/* exported init */
-
-class Extension {
-    constructor() {
+  enable() {
+    global.stage.get_actions().forEach(action => { action.enabled = false })
+    const disableUnmaximizeGesture = () => {
+      global.stage.remove_action_by_name('osk');
+      global.stage.get_actions().forEach(action => {
+        if (action === this) return
+        action.enabled = false
+      })
     }
-
-    enable() {
-    	global.stage.get_actions().forEach(a => { a.enabled = false })
-    	const disableUnmaximizeGesture = () => {
-      		global.stage.get_actions().forEach(a => { if (a !== this) { a.enabled = false } });
-      		global.stage.remove_action_by_name('osk');
-    	}
-    	global.display.connect('notify::focus-window', disableUnmaximizeGesture)
-    	global.display.connect('in-fullscreen-changed', disableUnmaximizeGesture)
+    if (this.focusWindowId === null) {
+      this.focusWindowId = global.display.connect('notify::focus-window', disableUnmaximizeGesture)
     }
-
-    disable() {
-     	global.stage.get_actions().forEach(a => { a.enabled = true })
-    	const enableUnmaximizeGesture = () => {
-      		global.stage.get_actions().forEach(a => { if (a !== this) { a.enabled = true } })
-    	}
-    	global.display.connect('notify::focus-window', enableUnmaximizeGesture)
-    	global.display.connect('in-fullscreen-changed', enableUnmaximizeGesture)
+    if (this.inFullscreenChangedId === null) {
+      this.inFullscreenChangedId = global.display.connect('in-fullscreen-changed', disableUnmaximizeGesture)
     }
-}
+  }
 
-function init() {
-    return new Extension();
+  disable() {
+    if (this.inFullscreenChangedId !== null) {
+      global.display.disconnect(this.inFullscreenChangedId)
+      this.inFullscreenChangedId = null
+    }
+    if (this.focusWindowId !== null) {
+      global.display.disconnect(this.focusWindowId)
+      this.focusWindowId = null
+    }
+    global.stage.get_actions().forEach(action => { action.enabled = true })
+  }
 }
